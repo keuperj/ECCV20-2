@@ -23,8 +23,7 @@ Supervised approaches for person re-identification require large amounts of sequ
 
 
 
-Thus, publicly available, \footnotetext{ 
-Specifically, we mine GT tracklets from the detections with IoU $>0.5$ with the GT as e.g. done in~\cite{leal2016learning}.}annotated training data currently seems not to be sufficient for training reliable person re-identification networks. Furthermore, recording and labeling sufficient data in a setting close to a final test scenario usually comes at a high price. Hence, the need for methods with a low amount of supervision becomes obvious and motivates us to propose a multiple object tracking method based on self-supervision.\\
+Thus, publicly available, annotated training data currently seems not to be sufficient for training reliable person re-identification networks. Furthermore, recording and labeling sufficient data in a setting close to a final test scenario usually comes at a high price. Hence, the need for methods with a low amount of supervision becomes obvious and motivates us to propose a multiple object tracking method based on self-supervision.\\
 While self-supervised learning methods~\cite{kolesnikov2019revisiting} have been successfully exploited in other vision tasks~\cite{watch_move,mahendran2018cross,hendrycks2019using,self_pedest,bb_annot,col_vid}, a direct application to tracking is non-trivial: Learning suitable object appearance metrics for object tracking in a self-supervised way is challenging since, compared to classical clustering problems, visual features of the same person may change over time due to pose and viewpoint changes and partial occlusion.
 Other issues, such as frequent and long range full occlusion or background noises, makes pedestrian tracking even more challenging.\\
 
@@ -65,13 +64,18 @@ We use the resulting information in the minimum cost lifted multicut framework, 
 		\MyTBox{13}{\textcolor{c_green}{2.2}}{\textcolor{c_green}{2.2}}{\textcolor{c_green}{2.2}}{\textcolor{c_green}{0.2}}{\textcolor{c_green}{0.2}}{\textcolor{c_green}{1.3}}{\textbf{100.0}}
 	}
 	\vspace*{5mm}
-	\caption{Relative MOTA decay for non-matching sequences on MOT17, FRCNN in comparison to the baseline (bold). Columns represent the training sequence, rows the test sequence. Cross-sequence tracking performance is unstable.
+	\caption{
+	Results for training with one training sequence using \emph{GT annotations}\footnotemark for the tracklet generation, and evaluating on another training sequences with different viewpoints and resolutions. 
+%Specifically, we mine GT tracklets from the detections with IoU $>0.5$ with the GT as e.g. done in~\cite{leal2016learning}.
+%Tab. \ref{tab:supervised_compare} shows the results in terms of decay in performance when non-matching sequences are used for training.
+	this table shows the relative MOTA changes for non-matching sequences on MOT17, FRCNN in comparison to the baseline (bold). Columns represent the training sequence, rows the test sequence. Cross-sequence tracking performance is unstable.
 }
 	\vspace*{-5mm}
 	\label{tab:supervised_compare}
 	\end{center}
 \end{table}
-The rest of the paper is structured as follows. 
+The rest of the paper is structured as follows. \footnotetext{ 
+Specifically, we mine GT tracklets from the detections with IoU $>0.5$ with the GT as e.g. done in~\cite{leal2016learning}.}
 Section \ref{sec:related} discusses the related work on multiple object tracking. 
 Our self-supervised approach on multiple object tracking is explained in Section \ref{subsec:method}. 
 In Section \ref{sec:results}, we show the tracking performance of the proposed method in the MOT Benchmark ~\cite{MOT16} and conclude in  %\footnote{\url{https://motchallenge.net/data/MOT17/}}. 

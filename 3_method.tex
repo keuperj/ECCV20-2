@@ -24,7 +24,7 @@ Section \ref{subsec:multicut} describes the minimum cost (lifted) multicut appro
 	\begin{center}
 		\includegraphics[width=0.7\linewidth]{Fig_2_figure2.pdf}
 	\end{center}
-	\caption{Summary of our approach in two steps: 1. First, weak cluster labels (tracklets) are obtained from spatio-temporal vicinity using minimum cost multicuts~\cite{chopra-1993}. 2. Then, visual features are learned by an AutoEncoder, with an additional data association loss within the tracklets. The AutoEncoder provides a stable appearance embedding  while the in order to extract affinity information to obtain final clustering (tracking) using lifted multicuts.}
+	\caption{Summary of our approach in two steps: 1. First, weak cluster labels (tracklets) are obtained from spatio-temporal vicinity using minimum cost multicuts~\cite{chopra-1993}. 2. Then, visual features are learned by an AutoEncoder, with an additional data association loss within the tracklets. The AutoEncoder provides a stable appearance embedding while the additional loss forces detections within one tracklet to have similar embeddings. This facilitates to extract affinities between detections to compute the final tracking with re-identification using lifted multicuts~\cite{tang2017multiple}.}
 	\label{fig:figure0}
 \vspace*{-5mm}
 \end{figure*}
@@ -83,7 +83,7 @@ d_{i, j} = \|f(x_i) - f(x_j)\|
 		%\fbox{\rule{0pt}{2in} \rule{0.9\linewidth}{0pt}}
 		\includegraphics[width=1.0\linewidth]{Fig_4_figure.pdf}
 	\end{center}
-	\caption{Nearest Neighbor of the query detection (left) within 46 frames with a step size of 5 frames of the sequence MOT17-09-SDP. The second row shows a False Positive neighbor. }
+	\caption{Nearest neighbor of the query detection (left most detection) within 46 frames with a step size of 5 frames of the sequence MOT17-09-SDP without (top) and with (bottom) the self-supervised clustering loss. Without this loss, the detections on the girl are spread over several clusters and a false association is made by the nearest neighbor. These mistakes are corrected by the clustering loss. }  
 	\label{fig:figure3}
 \end{figure*}
 
@@ -100,7 +100,7 @@ At frame 15, 20 or 25, the position is slightly zoomed and $d_{\mathrm{AE}}$ inc
 \begin{figure}[!t]
 	\begin{center}
 		%\fbox{\rule{0pt}{2in} \rule{0.9\linewidth}{0pt}}
-		\includegraphics[width=0.9\linewidth]{Fig_5_figure.pdf}
+		\includegraphics[width=0.7\linewidth]{Fig_5_figure.pdf}
 	\end{center}
 	\caption{TSNE Visualization of the latent space of the trained auto-encoder for the sequence MOT17-04 FRCNN. The colors represent the assigned person IDs.}
 	\label{fig:graph4}
