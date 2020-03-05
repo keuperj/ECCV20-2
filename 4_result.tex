@@ -1,0 +1,167 @@
+%%%%%%%%% BODY TEXT
+\section{Experiments and Results}
+\label{sec:results}
+We evaluated the proposed method on the MOT17 Benchmark~\cite{MOT16} for multiple person tracking. 
+The dataset consists of 14 sequences, divided into train and test sets with 7 sequences each. 
+For all sequences, three different detection sets are provided, from the detectors SDP\cite{yang2016exploit}, DPM\cite{felzenszwalb2010object} and FRCNN \cite{ren2015faster}, thus yielding 21 sequences in both data splits. 
+The settings between the training and testing scenes are very similar such as moving/static camera, place of recording or view angle, such that learning-based methods usually train on the most similar training sequence for every test sequence.
+For the evaluation, we use the standard CLEAR MOTA metric~\cite{MOT15}. 
+We reported Tracking Accuracy (MOTA), Precision (MOTP), number of identity switches (IDs), mostly tracked trajectories ratio (MT) and mostly lost trajectories (ML).
+
+\begin{table*}[t]
+\small
+\begin{center}
+	\begin{tabular}{c l c r r r r r r r}
+		\hline
+		No   & Features & Distance & MOTA & MOTP  & IDs & MT & ML & FP & FN \\
+		\hline\hline
+		1 & IoU$_{\mathrm{DM}}$ & 1-3 & 47.2 & 83.8 & 2,976 & 313 & 659 & 7,633 & 167,109 \\
+		2 & $d_{\mathrm{AE}}$ & 1-3 & 35.9 & 84.2 & 4,611 & 128 & 755 & 6,726 & 204,681 \\
+		3 & $d_{\mathrm{AE+C}}$ & 1-3 & 46.6 & 83.7 & 2,290 & 302 & 655 & 7,592 & 170,140 \\
+		4 & Combined (1+2) & 1-3 & 49.4 & 83.5 & 1,730 & 381 & 593 & 7,536 & 161,057 \\
+		5 & Combined (1+3) & 1-3 & 49.4 & 83.4 & 1,713 & 380 & 594 & 7,786 & 161,084  \\
+		\hline
+		6 & IoU$_{\mathrm{DM}}$ & 1-5 & 47.1 & 83.6 & 2,808 & 318 & 669  & 11,015 & 164,515 \\
+		7 & $d_{\mathrm{AE}}$ & 1-5 & 35.1 & 84.0 & 4,361 & 139 & 745  & 8,810 & 174,717 \\
+		8 & $d_{\mathrm{AE+C}}$ & 1-5 & 44.8 & 83.6 & 2,585 & 276 & 660 & 8,810 & 174,717 \\
+		9 & Combined (6+7) & 1-5 & 49.7 & 83.3 & 1,567 & 389 & 578 & 9,067 & 158,788 \\
+		10 & Combined (6+8) & 1-5 & 49.8 & 83.3 & 1,569 & 388 & 580 & 8,869 & 158,715 \\
+		\hline
+		\textbf{11} & \textbf{Proposed} & \textbf{1-5} & \textbf{49.9} & \textbf{83.3} & \textbf{1,453} & \textbf{394} & \textbf{579} & \textbf{8,929} & \textbf{158,448} \\
+		\hline
+	\end{tabular}
+    \caption{Tracking Performance using different features on MOT17 Training Dataset. The third column refers to the frame distance over which bounding boxes are connected in the graph. $d_{\mathrm{AE}}$ represents the AutoEncoder latent space distance while $d_{\mathrm{AE+C}}$ includes the clustering term, respectively. Our proposed approach includes lifted edges~\cite{tang2017multiple}. Details in supplementary materials.}
+\label{tab:mcsetup}
+\vspace*{-8mm}
+\end{center}
+\end{table*}
+
+\begin{table*}
+	\small
+	\begin{center}
+		\begin{tabular}{l c c c c c c c c}
+			\hline
+			Sequence & Method &\textbf{MOTA} & MOTP & IDs  & MT & ML & FP & FN \\
+			\hline
+			Tracktorv2\cite{bergmann2019tracking} & Supervised & \textbf{56.3} & \textbf{78.8} & 1,987 & 21.1 & 35.3 & \textbf{8,866} & 235,449\\
+			LSST17\cite{feng2019multi} & Supervised & 54.7 & 75.9 & \textbf{1,243}  & 20.4 & 40.1 & 26,091 & \textbf{228,434}\\
+			Tracktor17\cite{bergmann2019tracking} & Supervised & 53.5 & 78.0 & 2,072 & 19.5 & 36.6 & 12,201 & 248,047 \\
+			JBNOT\cite{henschel2019multiple} & Supervised & 52.6 & 77.1 & 3,050 & 19.7 & 35.8 & 31,572 & 232,659 \\
+			FAMNet\cite{chu2019famnet} & Supervised & 52.0 & 76.5 & 3,072 & 19.1 & \textbf{33.4} & 14,138 & 253,616 \\
+			%eTC17\cite{wang2019exploit} & Supervised & 51.9 & 76.3 & 2,288 & \textbf{23.1} & 35.5 & 36,164 & 232,783 \\
+			%FWT\cite{henschel2018fusion} & Supervised & \textbf{51.3} & 77.0 & 2,648 & 47.6 & \textbf{21.4} & \textbf{35.2} & 24,101 & 247,921\\
+			%jCC\cite{keuper2018motion} & Supervised & 51.2 & 75.9 & 1,802 & 54.5 & 20.9 & 37.0 & 25,937 & 247,822 \\
+		    %	MHT\_DAM\_17\cite{kim2015multiple} & Supervised & 50.7 & 77.5 & 2,314 & 47.2 & 20.8 & 36.9 & 22,875 & 252,889\\
+			%TLMHT\_17\cite{8533372} & Supervised & 50.6 & \textbf{77.6} & \textbf{1,407} & \textbf{56.5} & 17.6 & 43.4 & 22,213 & 255,030\\
+			%EDMT17\cite{chen2017enhancing} & Supverised & 50.0 & 77.3 & 2,264 & 51.3 & 21.6 & 36.3 & 31,279 & \textbf{247,297}\\
+			\hline
+			\textbf{Ours} & \textbf{Self-supervised} & 48.1 & 76.7 & 2,350 & 17.7 & 39.9 & 16,839 & 273,819\\
+			\hline
+			
+		\end{tabular}
+	\caption{Tracking result compared to other methods on the MOT17 dataset. The best performance is marked in bold. \AK{In column "MT"  there is not any bold number}}
+	\label{tab:mot17compare}
+    \vspace*{-10mm}
+	\end{center}
+\end{table*}
+After providing our implementation details, we report an ablation study on the training sequences of MOT17 in section~\ref{subsec:ablationstudy}. 
+Our final results are discussed in section~\ref{subsec:mot17benchark}.\\
+
+\noindent\textbf{Implementation Details}.
+\label{subsec:experiment}
+Our implementation is based on the Tensorflow Deep Learning Framework. 
+We use a convolutional AutoEncoder in order to extract features by optimizing the equation~\eqref{eq:clusterloss}.
+Thus no pre-training or any other ground truth is required. 
+Furthermore, our pre-processing step is only limited to extracting the detections from all sequences and resizing them to the corresponding size of the AutoEncoder input layer. 
+Thus the detections from the MOT17 dataset are directly fed to the AutoEncoder. 
+For each sequence from the dataset (MOT17-01 to MOT17-14 with the detector SDP, FRCNN and DPM), one individual model is trained with the same setup and training parameters.
+However, it is important to note that the number of detections for each individual person varies significantly:
+%This is due to the fact that individual pedestrians are captured in a scene over many frames while others %are quickly passing by or simply missed by the detector.
+while some pedestrians are staying in the scene for a long time, others are passing by quickly out of the scene. 
+This results different cluster sizes.
+To balance this, randomized batches of detections are applied during the training, where each batch contains only images from one single frame. 
+This way, one iteration of training contains only detections from unique persons. The initial learning rate is set to $\alpha=0.001$ and decays exponentially by a factor of 10 over time. 
+The balancing parameter between reconstruction and clustering loss is set to $\lambda = 0$ at the beginning in order to first learn the visual features of the video sequences. 
+After five epochs, the cluster information is included in the training, e.g. $\lambda$ is set to $0.95$ to encode the appearance variations from the spatio-temporal clusters into the latent space of the AutoEncoder.\\
+
+\noindent\textbf{From Clusters to Tracklets}. 
+To transform detection clusters into actual tracks, we follow the procedure proposed in~\cite{tang2016multi}, i.e. from all detections within one cluster, we select the one with the best detection score pre frame. Clusters containing less than 5 detections are completely removed and gaps in the resulting tracklets are filled using bilinear interpolation. 
+
+\subsection{Ablation Study}
+\label{subsec:ablationstudy}
+
+We investigated feature setups in the minimum cost multicut framework. 
+The cut probability between pairs of nodes are computed using a logistic regression function. 
+Adding new features directly affects the edge cost between pairs thus resulting in different clustering performances. 
+Here, we investigate the extent to which our proposed appearance model improves the tracking performance.
+%All studies were conducted on the complete MOT17 training dataset. 
+
+\noindent\textbf{Comparison of different setups}.
+Table \ref{tab:mcsetup} shows the evaluated setups and the resulting tracking performance scores. %In total, we conducted 11 experiments. 
+The column \textit{Features} lists the added features to the logistic regression model. 
+The temporal distances over which bounding boxes are connected in the graph are marked in the column \textit{Distances}. 
+The tracking accuracy of experiment 1 and 6, which uses IoU$_{\mathrm{DM}}$ only, is 47.2\% and 47.1\%, respectively. 
+Experiment 2+3 and 7+8 compare the different AutoEncoder models: the euclidean distance ($d_{\mathrm{AE}}$) from the AutoEncoder latent space is computed in order to estimate the similarity of each pair detections. 
+Here, $d_{\mathrm{AE}}$ denotes the latent space distance before adding the clustering loss while $d_{\mathrm{AE+C}}$ denotes the distance after training of the AutoEncoder with the clustering loss, i.e. our proposed appearance method.\\
+
+\noindent\textbf{Best performance with proposed method}.
+The benefit of using the clustering loss on the model training is obvious: for both distances (1-3 and 1-5 frames), the performance is significantly higher. 
+For distance 1-3, $d_{\mathrm{AE+C}}$ has a tracking accuracy of 46.6 compared to $d_{\mathrm{AE}}$ (35.9) and for distance 1-5, the MOTA scores are 44.8 and 35.1 for $d_{\mathrm{AE+C}}$ and $d_{\mathrm{AE}}$, respectively. 
+Although the scores are lower than using IoU$_{\mathrm{DM}}$, combining them both together increases the performance further. 
+This is shown in experiment 4+5 and 9+10, where the best score is achieved with in experiment 10 (proposed method).
+We also observe that the number of identity switches (IDs) is reduced with our setup.
+Finally, we add a long range edges and solve minimum cost lifted multicut problems on $G$. 
+The lifted edges are inserted in a sparsely for 10, 20 and 30 frames distances. 
+This is empirically studied and will be provided in the supplementary materials.
+Our best performance is achieved using the setup of experiment 11 with a MOTA of 49.9\% using all model components.\\
+
+\subsection{Results}
+\label{subsec:mot17benchark}
+
+\noindent\textbf{Tracking Performance on test data}. 
+Here, we present and discuss our final tracking results on the MOT17 test dataset. 
+Compared to the performance on the training dataset, the MOTA score of our proposed approach is slightly lower (Training: 49.9\% vs. Testing: 48.1\%), which is within the observed variance between different sequences, neglecting excessive parameter tuning.
+%The only parameter was choosing the lifted edge range, which increased the tracking accuracy on the training data by roughly 0.1\% and reduced the number of IDs by 116.
+The best performance is achieved in conjunction with the SDP-detector while the performance on the noisier DPM detections is weaker.\\
+
+\noindent\textbf{Comparison with other tracking approaches}. 
+We compare our method with the current top five best reported tracking methods Tracktorv2\cite{bergmann2019tracking}, LSST17\cite{feng2019multi}, Tracktor17\cite{bergmann2019tracking}, JBNOT\cite{henschel2019multiple} and FAMNet\cite{chu2019famnet}.
+We consider a tracking method as supervised when ground truth data is used (for example label data for learning a regression function) or if any pre-trained model is included in the approach.
+Table \ref{tab:mot17compare} gives an overview of the scores in different metrics that is being evaluated. 
+The best on each category is marked in bold. 
+Our proposed method is competitive given the fact that no pre-trained model or any other ground truth is employed. 
+%Furthermore, the training of an AutoEncoder is straightforward and simple.
+Without using any of the provided human annotations and with identical parameter settings for all sequences and detectors, our resulting MOTA scores are shown to be competitive.\\
+
+%\noindent\textbf{Sequence specific training}. 
+%To validate the importance of sequence specific training, we ran a small experiment on the MOT17 training dataset: 
+%We evaluated models, each trained on one training sequence using \emph{GT annotations} for the tracklet generation, on other training sequences with different viewpoints and resolutions. 
+%Specifically, we mine GT tracklets from the detections with IoU $>0.5$ with the GT as e.g. done in~\cite{leal2016learning}.
+%Tab. \ref{tab:supervised_compare} shows the results in terms of decay in performance when non-matching sequences are used for training. 
+%Moreover, total MOTA scores in all setups are below our reported one (49.9\%.). 
+%Despite the availability of annotated data in general, self-supervised approaches are thus important for good performance on previously unseen recording settings.
+%and are essential of generalization ability for future problems.
+
+%-------------------------------------------------------------------------
+%\begin{table}
+%    \vspace*{-4mm}
+%
+%	\begin{center}{
+%    \small
+%		\offinterlineskip
+%		\hspace*{3mm}
+%		\hspace*{0.9cm}\MyHBox{02}\MyHBox{04}\MyHBox{05}\MyHBox{09}\MyHBox{10}\MyHBox{11}\MyHBox{13}\par
+%        \vspace{-0.2cm}
+%		\MyTBox{02}{\textbf{100}}{\textcolor{c_red}{-0.3}}{\textcolor{c_red}{-0.6}}{\textcolor{c_red}{-11.9}}{\textcolor{c_red}{-11.9}}{\textcolor{c_red}{-9.8}}{\textcolor{c_red}{-14.0}}
+%		\MyTBox{04}{0.0}{\textbf{100}}{0.0}{\textcolor{c_red}{-11.6}}{\textcolor{c_red}{-11.6}}{\textcolor{c_red}{-4.9}}{\textcolor{c_red}{-9.5}}
+%		\MyTBox{05}{\textcolor{c_red}{-0.2}}{\textcolor{c_red}{-0.6}}{\textbf{100.0}}{\textcolor{c_red}{-2.0}}{\textcolor{c_red}{-2.0}}{\textcolor{c_red}{-5.1}}{\textcolor{c_red}{-3.6}}
+%		\MyTBox{09}{0.0}{\textcolor{c_red}{-0.2}}{0.0}{\textbf{100.0}}{0.0}{\textcolor{c_red}{-2.2}}{\textcolor{c_red}{-0.5}}
+%	}
+    %\vspace*{5mm}
+%	\caption{Relative MOTA decay for non-matching sequences on MOT17, FRCNN in comparison to the baseline (bold). Columns represent the training sequence, rows the test sequence. 
+%    }
+%	\label{tab:supervised_compare}
+%	\end{center}
+%	\vspace*{-10mm}
+%
+%\end{table}

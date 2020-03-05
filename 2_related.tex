@@ -1,0 +1,36 @@
+%%%%%%%%% BODY TEXT
+
+\section{Related Work}
+\label{sec:related}
+\noindent\textbf{Multiple Object Tracking}. 
+In Multiple Object Tracking, the most common approach is \textit{Tracking by Detection}. 
+The objective is to associate detections of individual persons, which may have spatio or temporal changes in the video. 
+Thus re-identification over a long range remains a challenging task.
+Multiple object tracking by linking bounding box detections (\emph{tracking by detection}) was studied, e.g., in \cite{Pirsiavash:2011:GOG,Andriyenko2012CVPR,Huang:2008:ROT,AndrilukaCVPR2010,FragkiadakiECCV12,Zamir:2012:GMC,Henschel:2014:EMP,tang14ijcv,Henschel:2014:EMP,DBLP:journals/corr/HenschelLCR17}. 
+These works solve the combinatorial problem of linking detections over time via different formulations e.g. via integer linear programming \cite{Shitrit:2011:TMP,wang-et-al-2014}, MAP estimation~\cite{Pirsiavash:2011:GOG}, CRFs \cite{10.1007/978-3-319-16817-3_29}, continuous optimization \cite{Andriyenko2012CVPR} or dominant sets \cite{7503631}. 
+In such approaches, the pre-grouping of detections into tracklets or non-maximum suppression are commonly used to reduce the computational costs \cite{Huang:2008:ROT,WojekECCV10,AndrilukaCVPR2010,FragkiadakiECCV12,Zamir:2012:GMC,WojekPAMI2013,Henschel:2014:EMP,tang14ijcv}.
+For example Zamir~et~al.~\cite{Zamir:2012:GMC} use generalized minimum clique graphs to generate tracklets as well as the final object trajectories.
+Non-maximum suppression also plays a crucial role in disjoint path formulations, such as \cite{networkflow1,networkflow2,Chari2015OnPC}.
+In the work of Tang et al. \cite{tang2016multi}, local pairwise features based on DeepMatching are used to solve a multicut problem. 
+The affinity measure is invariant to camera motion and thus makes it reliable for short term occlusions. 
+An extension of this work is found in \cite{tang2017multiple}, where additional long range information is included. 
+By introducing a lifted edge in the graph, an improvement of person re-identification has been achieved.
+In \cite{keuper2018motion}, low-level point trajectories and the detections are combined to jointly solve a co-clustering problem, where dependencies are established between the low-level points and the detections. 
+Henschel et al. \cite{henschel2018fusion} solves the multiple object tracking problem by incorporating additional head detecion to the full body detection while in \cite{henschel2019multiple}, they use a body and joint detector to improve the quality of the provided noisy detections from the benchmark.
+Other works that treat Multiple object tracking as a graph-based problem can be found in \cite{henschel2017improvements}, \cite{keuper2015efficient}, \cite{keuper2016multi}, \cite{kumar2014multiple} and \cite{zamir2012gmcp}.
+In contrast, \cite{ma2018trajectory} introduces a tracklet-to-tracklet method based a combination of Deep Neural Networks, called \textit{Deep Siamese Bi-GRU}. 
+The visual appearance of detections are extracted with CNNs and RNNs in order to generate a tracklet of individuals.
+These tracklets are then split and reconnected in a way that occluded persons are correctly re-identified. 
+The framework uses spatial and temporal information from the detector to associate the tracklet. 
+The approach in~\cite{bergmann2019tracking} exploits the bounding box information by learning from detectors first and combined with a re-identification model trained on a siamese network. 
+While the state of the art approaches in MOT17 Challenge are all based on supervised learning \cite{henschel2018fusion, keuper2018motion, kim2015multiple, 8533372, chen2017enhancing}, there are similar works in \cite{li2018unsupervised, lv2018unsupervised}, which attempt to solve person re-identification (ReID) problems in an unsupervised manner.\\
+
+\noindent\textbf{Self-supervised learning} aims to generate pseudo label automatically from a pretext task, then applied on for unlabeled data in order to solve downstream tasks. 
+This is especially useful when no label data is available and thus self-supervised approaches can be applied to many specific real-world problems. An extensive review of recent methods is presented in~\cite{jing2019self}. 
+For instance \cite{pathak2017learning} uses a motion-based approach to obtain labels to train a convolutional neural network for semantic segmentation problems.
+Another work on self-supervision based on motion can be found in \cite{mahendran2018cross}
+The idea of Doersch et al.~\cite{doersch2015unsupervised} is to predict the position of eight spatial configurations given an image pair.
+In~\cite{pathak2016context} semantic inpainting task is solved using a context encoder to predict missing pixels of an image.
+Hendrycks et al.~\cite{hendrycks2019using} use self-supervised method to improve robustness of deep learning models.
+Lee et al.~\cite{lee2019multi} propose an approach to improve of object detection by recycling the
+bounding box labels while Ye et al.~\cite{ye2017self} uses are progressive latent model to learn a customized detector based on spatio-temporal proposals.

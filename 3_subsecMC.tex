@@ -1,0 +1,79 @@
+We follow Tang~\cite{tang2017multiple} and phrase the multiple target tracking problem as a graph partitioning problem, more concretely, as a minimum cost (lifted) multicut problem. This formulation can serve as well for an initial tracklet generation process, which will help us to inject cues learned from spatial information into the appearance features, as it can be used to generate the final tracking result using short- and long-range information between object detections. \\
+
+\noindent\textbf{Minimum Cost Multicut Problem}.
+%%%
+We assume, we are given an undirected graph {\it $G = (V, E)$}, where nodes $v\in V$ represent object detections and edges $e\in E$ encode their respective spatio-temporal connectivity. 
+Additionally, we are given real valued costs {\it $c: E \rightarrow \mathbb{R}$} defined on all edges. 
+Our goal is to determine \emph{edge} labels {\it $y: E \rightarrow \{0, 1\}$} defining a graph decomposition such that every partition of the graph corresponds to exactly one object track (or tracklet). 
+To infer such an edge labeling, we can solve instances of the minimum cost multicut problem with respect to the graph G and costs c, defined as follows \cite{chopra-1993,demaine-2006}:
+
+\begin{align}
+\min\limits_{y \in \{0, 1\}^E}
+\sum\limits_{e \in E} c_e y_e
+\label{eq:mc}
+\end{align}
+
+\begin{align}
+s.t. \quad \forall C \in cycles(G) \quad \forall e \in C : y_e \leq \sum\limits_{e^\prime \in C\backslash\{e\}} y_{e^\prime}
+\label{eq:cycle}
+\end{align}
+Here, the objective is simply to cut those edges with negative costs $c_e$ such that the resulting cut is a decomposition of the graph. 
+This condition is formalized by the cycle inequalities in Eq.~\eqref{eq:cycle}, which make sure that, for every cycle in $G$, if one of its edges is cut, so is at least one other.
+Thus, no two nodes can remain connected via some path of the graph if an edge is cut between them along any other path. 
+In \cite{chopra-1993}, it was shown to be sufficient to enforce Eq.~\eqref{eq:cycle} on all \emph{chordless} cycles, i.e. all cycles.
+
+Typically, if cut probabilities between pairs of nodes are available, the costs are computed using the \emph{logit} function $\text{logit}(p) = \log\frac{p}{1-p}$  to generate positive and negative costs.
+With these costs set appropriately, the optimal solution of minimum cost multicut problems not only yields an optimal cluster assignment but also estimates the number of clusters (e.g. objects to track) automatically. 
+
+While the plain minimum cost multicut problem has shown good performance in multiple object tracking scenarios with only short range information available~\cite{tang2016multi}, the cost function actually has a rather limited expressiveness. 
+In particular, when we want to add connectivity cues between temporally distant bounding boxes, we can only do so by inserting a direct edge into the graph. 
+This facilitates solutions that directly connect such distant nodes even if this link is not justified by any path through space and time. 
+This limitation is alleviated by the formulation of minimum cost \emph{lifted} multicuts~\cite{keupericcv}.\\
+
+\noindent\textbf{Minimum Cost Lifted Multicut Problem}.
+%%%
+For a given, undirected graph $G = (V, E)$ and an additional edge set $F\subseteq \binom{V}{2} \setminus E$ and any  real valued cost function $c: E \cup F \to \mathbb{R}$,
+the 01 linear program written below is an instance of the
+\emph{Minimum Cost Lifted Multicut Problem (LMP)}
+w.r.t.~$G$, $F$ and $c$~\cite{keupericcv}:
+%
+\begin{equation}
+\displaystyle\min_{y \in Y_{EF}} 
+    \quad \sum_{e \in E \cup F} c_e y_e
+    \label{eq:lmc}
+\end{equation}
+%
+with $Y_{EF} \subseteq \{0,1\}^{E \cup F}$ the set of all $y \in \{0,1\}^{E \cup F}$ with
+%
+\begin{equation}
+ \qquad\forall C \in \textnormal{cycles}(G)\ \forall e \in C:\ 
+    y_e \leq \hspace{-2ex} \sum_{e' \in C \setminus \{e\}} \hspace{-2ex} y_{e'} 
+\label{eq:lmc-cut1}
+\end{equation}
+\begin{equation}
+ \forall vw \in F\ \forall P \in vw\textnormal{-paths}(G):\ 
+    y_{vw} \leq \sum_{e \in P} y_e \quad
+\label{eq:lmc-cut2}\end{equation}
+\begin{equation}
+ \hspace{-1ex} \forall vw \in F\ \forall C \in vw\textnormal{-cuts}(G):
+    1 - y_{vw} \leq \sum_{e \in C} (1 - y_e) 
+\label{eq:lmc-cut}
+   \end{equation}
+
+%$= E\cup E^\prime)$}, real valued costs {\it $c: F \rightarrow \mathbb{R}$} and edge labels {\it $y: F \rightarrow \{0, 1\}$}, the minimum cost \emph{lifted} multicut problem with respect to lifted graph {\it $G$} is defined as follows
+The above inequalities Eq.~\eqref{eq:lmc-cut1} make \AK{makes} sure that, as before, the resulting edge labeling is actually inducing a decomposition of $G$. Eq.~\eqref{eq:lmc-cut2} enforces the same constraints on cycles involving edges from $F$, i.e. so called \emph{lifted} edges, and Eq.\eqref{eq:lmc-cut} makes sure that nodes that are connected via a lifted edge $e\in F$ are connected via some path along original edges  $e'\in E$ as well. 
+Thus, this formulation allows for a generalization of the cost function to include long range information without altering the set of feasible solutions.\\
+
+\noindent\textbf{Optimization}.
+The minimum cost multicut problem~\eqref{eq:mc} as well as the minimum lifted multicut problem~\eqref{eq:lmc} are NP-hard \cite{bansal-2004} and even APX-hard \cite{demaine-2006,hornakova-2017}. 
+Nonetheless, instances have been solved within tight bounds, e.g. in \cite{andres-2012-globally} using a branch-and-cut approach. 
+While this can be reasonably fast for some, easier problem instances, it can take arbitrarily long for others. 
+Thus, primal heuristics such as the one proposed in~\cite{keupericcv} or~\cite{CGC} are often employed in practice and show convincing results in various scenarios \cite{keupericcv,tang2017multiple,insafutdinov2016deepercut,node_agglom}.\\
+
+\noindent\textbf{Spatio-Temporal Tracklet Generation}.
+Since the proposed approach is self-supervised in a sense that no annotated labels from the dataset are used in the training process, it is challenging to effectively learn such probabilities. 
+To approach this challenge, we first extract reliable point matches between neighboring frames using DeepMatching~\cite{dm} as done before e.g. in \cite{tang2016multi,tang2017multiple,keuper2018motion}. 
+Instead of learning a regression model on features derived from the resulting point matches, we simply assume that the intersection over union (IoU) of retrieved matched within pairs of detections (denoted by IoU$_{\mathrm{DM}}$) is an approximation to the true IoU. 
+Thus, when IoU$_{\mathrm{DM}}>0.7$, we can be sure we are looking at the same object in different frames. 
+While this rough estimation is not suitable in the actual tracking task since it clearly over-estimates the cut probability, it can be used to perform a pre-grouping of detections that definitely belong to the same person. 
+The computation of pairwise cut probabilities used in the lifted multicut step for the final tracking task is described in section~\ref{subsec:affinity}.

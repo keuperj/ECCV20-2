@@ -1,0 +1,122 @@
+% updated April 2002 by Antje Endemann
+% Based on CVPR 07 and LNCS, with modifications by DAF, AZ and elle, 2008 and AA, 2010, and CC, 2011; TT, 2014; AAS, 2016; AAS, 2020
+
+\documentclass[runningheads]{llncs}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{amsmath,amssymb} % define this before the line numbering.
+\usepackage{color}
+\usepackage{cite}
+\usepackage{caption} 
+
+\usepackage{subcaption}
+
+\captionsetup[table]{skip=5pt}
+
+% INITIAL SUBMISSION - The following two lines are NOT commented
+% CAMERA READY - Comment OUT the following two lines
+\usepackage{ruler}
+\usepackage[width=122mm,left=12mm,paperwidth=146mm,height=193mm,top=12mm,paperheight=217mm]{geometry}
+
+\usepackage{xcolor}
+\usepackage{color,soul}
+\definecolor{darkgreen}{rgb}{0.0, 0.8, 0.0}
+\DeclareRobustCommand{\cm}[1]{{\begingroup\sethlcolor{darkgreen}\hl{\textbf{comment: 
+#1}}\endgroup}}
+
+
+% ------------------ custom command ------------------ 
+
+\definecolor{c_green}{rgb}{0.0,0.75,0.0}
+\definecolor{c_red}{rgb}{1,0.0,0}
+
+\newcommand\MyBox[1]{%
+	\fbox{\parbox[c][0.25cm][c]{0.8cm}{\centering #1}}%
+}
+\newcommand\MyVBox[1]{%
+	\parbox[c][0.25cm][c]{0.8cm}{\centering\bfseries #1}%
+}  
+\newcommand\MyHBox[2][\dimexpr0.8cm+2\fboxsep\relax]{%
+	\parbox[c][0.8cm][c]{#1}{\centering\bfseries #2}%
+}  
+\newcommand\MyTBox[8]{%
+	\MyVBox{#1}
+	\MyBox{#2}\hspace*{-\fboxrule}%
+	\MyBox{#3}\hspace*{-\fboxrule}%
+	\MyBox{#4}\hspace*{-\fboxrule}%
+	\MyBox{#5}\hspace*{-\fboxrule}%
+	\MyBox{#6}\hspace*{-\fboxrule}%
+	\MyBox{#7}\hspace*{-\fboxrule}%
+	\MyBox{#8}\par\vspace{-\fboxrule}
+}  
+
+\newcommand{\AK}[1]{\colorlet{currcol}{.}{\color{orange!80!red}\it[Amir: #1]}\color{currcol}\xspace}
+% ------------------ custom command ------------------ 
+
+
+\begin{document}
+% \renewcommand\thelinenumber{\color[rgb]{0.2,0.5,0.8}\normalfont\sffamily\scriptsize\arabic{linenumber}\color[rgb]{0,0,0}}
+% \renewcommand\makeLineNumber {\hss\thelinenumber\ \hspace{6mm} \rlap{\hskip\textwidth\ \hspace{6.5mm}\thelinenumber}}
+% \linenumbers
+\pagestyle{headings}
+\mainmatter
+\def\ECCVSubNumber{5180}  % Insert your submission number here
+
+\title{A Two-Stage Minimum Cost Multicut Approach \\ to Self-Supervised Multiple
+Person Tracking} % Replace with your title
+
+% INITIAL SUBMISSION 
+%\begin{comment}
+\titlerunning{ECCV-20 submission ID \ECCVSubNumber} 
+\authorrunning{ECCV-20 submission ID \ECCVSubNumber} 
+\author{Anonymous ECCV submission}
+\institute{Paper ID \ECCVSubNumber}
+%\end{comment}
+%******************
+
+% CAMERA READY SUBMISSION
+\begin{comment}
+\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
+Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
+Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
+%
+\authorrunning{F. Author et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{Princeton University, Princeton NJ 08544, USA \and
+Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
+\email{lncs@springer.com}\\
+\url{http://www.springer.com/gp/computer-science/lncs} \and
+ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
+\email{\{abc,lncs\}@uni-heidelberg.de}}
+\end{comment}
+%******************
+\maketitle
+
+\begin{abstract}
+Multiple Object Tracking (MOT) is a long-standing task in computer vision. Current approaches based on the tracking by detection paradigm either require some sort of domain knowledge or supervision to associate data correctly into tracks. In this work, we present an self-supervised multiple object tracking approach based on visual features and minimum cost lifted multicuts. Our method is based on straight-forward spatio-temporal cues that can be extracted from neighboring frames in an image sequences without supervision. Clustering based on these cues enables us to learn the required appearance invariances for the tracking task at hand and train an AutoEncoder to generate suitable latent representations. Thus, the resulting latent representations can serve as robust appearance cues for tracking even over large temporal distances where no reliable spatio-temporal features could be extracted. We show that, despite being trained without using the provided annotations, our model provides competitive results on the challenging MOT Benchmark for pedestrian tracking.
+
+\keywords{Multiple Object Tracking, Self-Supervervised Learning}
+\end{abstract}
+
+
+
+\input{1_introduction.tex}
+\input{2_related.tex}
+\input{3_method.tex}
+\input{4_result.tex}
+\input{5_conclusion.tex}
+
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+\bibliographystyle{splncs04}
+\bibliography{egbib}
+\end{document}
