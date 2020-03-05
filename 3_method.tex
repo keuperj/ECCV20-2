@@ -1,7 +1,7 @@
 %%%%%%%%% BODY TEXT
 \section{AutoEncoder-Based Multicut Approach}
 \label{subsec:method}
-The proposed approach is based on the idea to learn, from simple spatial data associations between object detections in image sequences, which appearance variations are to be expected within one object for the task of multiple object tracking \AK{this sentence is not clear to me}. An overview of our workflow implementing this idea is given in Fig.~\ref{fig:figure0}.
+The proposed approach is based on the idea to learn, from simple spatial data associations between object detections in image sequences, which appearance variations are to be expected within one object for the task of multiple object tracking. An overview of our workflow implementing this idea is given in Fig.~\ref{fig:figure0}.
 
 \textbf{Stage 1.} 
 The object detection bounding boxes are extracted along with their spatial information such that spatial correspondences between detections in neighboring frames can be computed.
@@ -22,9 +22,9 @@ Section \ref{subsec:multicut} describes the minimum cost (lifted) multicut appro
 
 \begin{figure*}[t]
 	\begin{center}
-		\includegraphics[width=0.9\linewidth]{Fig_2_figure2.pdf}
+		\includegraphics[width=0.7\linewidth]{Fig_2_figure2.pdf}
 	\end{center}
-	\caption{Summary of our approach in two steps: 1. Initial multicut clustering to obtain weak cluster labels (tracklets), 2. Learn visual features by an AutoEncoder in order to extract affinity information to obtain final clustering (tracking) using lifted multicuts.}
+	\caption{Summary of our approach in two steps: 1. First, weak cluster labels (tracklets) are obtained from spatio-temporal vicinity using minimum cost multicuts~\cite{chopra-1993}. 2. Then, visual features are learned by an AutoEncoder, with an additional data association loss within the tracklets. The AutoEncoder provides a stable appearance embedding  while the in order to extract affinity information to obtain final clustering (tracking) using lifted multicuts.}
 	\label{fig:figure0}
 \vspace*{-5mm}
 \end{figure*}
@@ -83,7 +83,7 @@ d_{i, j} = \|f(x_i) - f(x_j)\|
 		%\fbox{\rule{0pt}{2in} \rule{0.9\linewidth}{0pt}}
 		\includegraphics[width=1.0\linewidth]{Fig_4_figure.pdf}
 	\end{center}
-	\caption{Nearest Neighbor of the query detection (left) within 40 \AK{46 frames} frames with a step size of 5 frames of the sequence MOT17-09-SDP. The second row shows a False Positive neighbor. \AK{this is not clear to me.}}
+	\caption{Nearest Neighbor of the query detection (left) within 46 frames with a step size of 5 frames of the sequence MOT17-09-SDP. The second row shows a False Positive neighbor. }
 	\label{fig:figure3}
 \end{figure*}
 
@@ -91,11 +91,11 @@ Figure~\ref{fig:figure3} shows the nearest neighbor of a selected frame $t$ (lef
 The example illustrates that the location of pair detections are close to one another in the latent space even over a long distance of up to 40 frames, although false positives still appear. 
 However, the example also shows that change in appearance affects the AutoEncoder distance, further denoted $d_{\mathrm{AE}}$. 
 For instance in the first row, frame 1 and frame 6 are very similar due to the same detection position of the person within the bounding box as well as the direction the woman is looking to (face to camera). 
-At frame 41, the woman \AK{isn't that a girl? (in fig. 3)} slightly turned her face to the right. 
+At frame 41, the woman (in fig. 3) slightly turned her face to the right. 
 Although the correct nearest neighbour was retrieved, the distance $d_{\mathrm{AE}}$ almost doubled.
 Another observation is that the position of the bounding box influences the latent space distance.
 In the second row, the first detection from the left (frame 5), the detection of the person is slightly shifted to the left. 
-At frame 15, 20 or 25, the position is slightly zoomed and $d_{\mathrm{AE}}$ increases \AK{which figure exactly it is referring to?}.
+At frame 15, 20 or 25, the position is slightly zoomed and $d_{\mathrm{AE}}$ increases.
 
 \begin{figure}[!t]
 	\begin{center}
@@ -122,7 +122,7 @@ The distance is directly casted to a binary logistic regression to compute the c
 The label that is used for the regression comes from the DeepMatching IoU. 
 If IoU$_{\mathrm{DM}}(x_i,x_j)<T_{low}$ for a threshold $T_{low}$, $x_i$ and $x_j$ most certainly belong to different objects. 
 If IoU$_{\mathrm{DM}}(x_i,x_j)>T_{high}$ for a different threshold $T_{high}$, they are very likely to match. 
-Formally, we estimate a probability $p_e \in [0,1]$ between two detections using a feature vector $f^{(e)}$ by regressing the parameters $beta$ \AK{$\beta$?} of a logistic function:
+Formally, we estimate a probability $p_e \in [0,1]$ between two detections using a feature vector $f^{(e)}$ by regressing the parameters $\beta$ of a logistic function:
 
 \begin{equation} 
 \label{eq:regression} p_e = \frac{1}{1+\exp(-\langle\beta, f^{(e)}\rangle)}
